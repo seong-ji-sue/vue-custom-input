@@ -10,7 +10,7 @@
           @change="onChange"
           @focus="onFocus"
           @blur="onBlur"
-          :style="{width:`${width}px`,height:`${height}`}"
+          :style="{width:`${width}px`,height:`${height}px`}"
           :class="{'click-border':isFocus}"
           class="input-style"
       />
