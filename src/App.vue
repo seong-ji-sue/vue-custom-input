@@ -1,28 +1,32 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <div>value : {{inputValue}}</div>
+    <input-custom
+        v-model="inputValue"
+        label="input custom"
+        placeholder="여기에 입력하세요"
+        width="150"
+        height="25"
+
+    ></input-custom>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
+import InputCustom from "@/components/InputCustom";
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    InputCustom
+  },
+  data() {
+    return {
+      inputValue: '',
+    }
+  },
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
