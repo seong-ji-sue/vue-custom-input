@@ -1,20 +1,24 @@
 <template>
   <div>
-    <label>
-      {{label}}
-      <input
-          type="text"
-          :name="name"
-          v-model="innerValue"
-          :placeholder="showPlaceholderText"
-          @change="onChange"
-          @focus="onFocus"
-          @blur="onBlur"
-          :style="{width:`${width}px`,height:`${height}px`}"
-          :class="{'click-border':isFocus}"
-          class="input-style"
-      />
+    <label style="display: flex">
+      <span>{{label}}</span>
+      <div style="display: flex;flex-direction: column">
+        <input
+            type="text"
+            :name="name"
+            :value="value"
+            :placeholder="showPlaceholderText"
+            @input="onInput"
+            @focus="onFocus"
+            @blur="onBlur"
+            :style="{width:`${width}px`,height:`${height}px`}"
+            :class="{'click-border':isClick}"
+            class="input-style"
+        />
+        <span v-if="error" class="error-style">{{error}}</span>
+      </div>
     </label>
+
   </div>
 </template>
 
@@ -23,12 +27,14 @@ export default {
   name: "InputCustom",
   emits:["change","on-focus"],
   props: {
-    value: { //input 이벤트로 적은값
-      type: [Number,String],
+    value: { //enter 누를때 바인딩
+      type: String,
+      required: true,
     },
     label:{
       type:String,
-      default:undefined
+      default:undefined,
+      required: true,
     },
     placeholder: {
       type: String,
@@ -46,9 +52,15 @@ export default {
   },
   data() {
     return {
-      innerValue: '',//input 값
-      isFocus: false //input을 클릭했는지 여부
-
+      isClick:false,
+      error:''
+    }
+  },
+  watch:{
+    value:{
+      handler(newValue){
+        if(newValue) this.error=''
+      }
     }
   },
   computed: {
@@ -56,27 +68,27 @@ export default {
       return this.label.toLowerCase();
     },
     showPlaceholderText(){
-      return !this.isFocus ? this.placeholder : ''
+      return !this.value ? this.placeholder : ''
     }
   },
   methods: {
     /**
      * input을 클릭할때
      */
-    onFocus() {//TODO::input을 클릭했을때 스타일 먹이고 다른쪽 클릭할때 스타일이 없어져야됨
+    onFocus() {
       this.isClick = true
     },
     onBlur(){
       this.isClick = false
     },
-    /**
-     * input 값을 입력했을때
-     */
-    onChange() {
-      if(this.innerValue === this.value) return
-      this.$emit("input",this.innerValue)
-      this.innerValue =undefined
+    onInput(e){
+      const value = e.target.value;
 
+      if (!value) {
+        this.error = 'Value should not be empty';
+      }
+
+      this.$emit('input', e.target.value)
     }
 
   },
@@ -84,15 +96,21 @@ export default {
 </script>
 
 <style scoped>
-.init-style{
-  border: 0;
+.input-wrapper{
+  display: flex;
+  flex-direction: column;
 }
 .click-border{
-  border:2px solid red !important;
+  border:1px solid red !important;
 }
 .input-style{
   border-radius: 5px;
   font-size: 13px;
-  color: #808080;
+  color: #000000;
 }
+.error-style{
+  font-size: 8px;
+  color: palevioletred;
+}
+
 </style>
