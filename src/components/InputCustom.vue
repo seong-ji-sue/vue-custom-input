@@ -6,9 +6,8 @@
         <input
             type="text"
             :name="name"
-            :value="value"
+            v-model="model"
             :placeholder="showPlaceholderText"
-            @input="onInput"
             @focus="onFocus"
             @blur="onBlur"
             :style="{width:`${width}px`,height:`${height}px`}"
@@ -56,19 +55,25 @@ export default {
       error:''
     }
   },
-  watch:{
-    value:{
-      handler(newValue){
-        if(newValue) this.error=''
-      }
-    }
-  },
   computed: {
     name() {
       return this.label.toLowerCase();
     },
     showPlaceholderText(){
       return !this.value ? this.placeholder : ''
+    },
+    model:{
+      get(){
+        return this.value;
+      },
+      set(value){
+        if (!value) {
+          this.error = 'Value should not be empty';
+        }else{
+          this.error = ''
+        }
+        this.$emit('input',value)
+      }
     }
   },
   methods: {
@@ -81,25 +86,12 @@ export default {
     onBlur(){
       this.isClick = false
     },
-    onInput(e){
-      const value = e.target.value;
-
-      if (!value) {
-        this.error = 'Value should not be empty';
-      }
-
-      this.$emit('input', e.target.value)
-    }
 
   },
 }
 </script>
 
 <style scoped>
-.input-wrapper{
-  display: flex;
-  flex-direction: column;
-}
 .click-border{
   border:1px solid red !important;
 }
