@@ -1,30 +1,25 @@
 <template>
-  <div>
-    <label style="display: flex">
-      <span>{{label}}</span>
-      <div style="display: flex;flex-direction: column">
-        <input
-            type="text"
-            :name="name"
-            v-model="model"
-            :placeholder="showPlaceholderText"
-            @focus="onFocus"
-            @blur="onBlur"
-            :style="{width:`${width}px`,height:`${height}px`}"
-            :class="{'click-border':isClick}"
-            class="input-style"
-        />
-        <span v-if="error" class="error-style">{{error}}</span>
-      </div>
-    </label>
-
+  <div class="input-wrapper">
+    <label>{{label}}</label>
+    <div style="display: flex;flex-direction: column">
+      <input
+          type="text"
+          :value="value"
+          class="input-style"
+          :name="name"
+          :placeholder="showPlaceholderText"
+          :style="{width:`${width}px`,height:`${height}px`}"
+          @input="onInput"
+          @change="onChange"
+      />
+      <span v-if="error" class="error-style">{{error}}</span>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "InputCustom",
-  emits:["change","on-focus"],
   props: {
     value: { //enter 누를때 바인딩
       type: String,
@@ -51,8 +46,7 @@ export default {
   },
   data() {
     return {
-      isClick:false,
-      error:''
+      error:'',
     }
   },
   computed: {
@@ -62,47 +56,39 @@ export default {
     showPlaceholderText(){
       return !this.value ? this.placeholder : ''
     },
-    model:{
-      get(){
-        return this.value;
-      },
-      set(value){
-        if (!value) {
-          this.error = 'Value should not be empty';
-        }else{
-          this.error = ''
-        }
-        this.$emit('input',value)
-      }
-    }
+
   },
   methods: {
-    /**
-     * input을 클릭할때
-     */
-    onFocus() {
-      this.isClick = true
+    onInput(e){
+      const value=e.target.value;
+      if (!value) {
+        this.error = 'Value should not be empty';
+      }else{
+        this.error = ''
+      }
+      this.$emit('input',value)
     },
-    onBlur(){
-      this.isClick = false
-    },
-
+    onChange(e){
+      this.$emit('change',e.target.value)
+    }
   },
 }
 </script>
 
 <style scoped>
-.click-border{
-  border:1px solid red !important;
+.input-wrapper{
+  display: flex;
 }
 .input-style{
   border-radius: 5px;
   font-size: 13px;
+  border : 2px solid rgba(0,0,0,.87);
   color: #000000;
 }
 .error-style{
   font-size: 8px;
-  color: palevioletred;
+  padding-left: 8px;
+  color : #ff5252 !important;
 }
 
 </style>

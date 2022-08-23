@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>{{inputValue}}</div>
+    <div>value : {{inputValue}}</div>
     <input-custom
         v-model="inputValue"
         label="input custom"
