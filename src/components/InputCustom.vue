@@ -21,7 +21,7 @@
 export default {
   name: "InputCustom",
   props: {
-    value: { //enter 누를때 바인딩
+    value: { //enter 누를때 바인딩as
       type: String,
       required: true,
     },
