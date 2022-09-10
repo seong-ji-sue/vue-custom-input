@@ -1,4 +1,4 @@
-# vue-custom-input
+# Vue를 사용해서 input을 커스텀 했습니다. 공식문서를 참고했습니다.
 
 ## Project setup
 ```
